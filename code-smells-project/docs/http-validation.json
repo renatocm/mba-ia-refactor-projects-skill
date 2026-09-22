@@ -1,0 +1,212 @@
+{
+  "boot": "ok",
+  "debug": false,
+  "server_stopped": true,
+  "temporary_database_removed": true,
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/login",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios/2",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios/1",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios/999",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "POST",
+      "path": "/produtos",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "GET",
+      "path": "/produtos",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/produtos/busca?q=HTTP",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/produtos/1",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/produtos/1",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "POST",
+      "path": "/produtos",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "PUT",
+      "path": "/produtos/1",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "method": "GET",
+      "path": "/produtos/999",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "POST",
+      "path": "/pedidos",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "GET",
+      "path": "/pedidos",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/pedidos/usuario/2",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "GET",
+      "path": "/pedidos/usuario/1",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "method": "PUT",
+      "path": "/pedidos/1/status",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/pedidos/1/status",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/pedidos/1/status",
+      "status": 409,
+      "expected": 409
+    },
+    {
+      "method": "PUT",
+      "path": "/pedidos/999/status",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "GET",
+      "path": "/relatorios/vendas",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/produtos/1",
+      "status": 409,
+      "expected": 409
+    },
+    {
+      "method": "POST",
+      "path": "/produtos",
+      "status": 201,
+      "expected": 201
+    },
+    {
+      "method": "DELETE",
+      "path": "/produtos/2",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/produtos/2",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "POST",
+      "path": "/admin/query",
+      "status": 404,
+      "expected": 404
+    },
+    {
+      "method": "POST",
+      "path": "/admin/reset-db",
+      "status": 404,
+      "expected": 404
+    }
+  ]
+}
