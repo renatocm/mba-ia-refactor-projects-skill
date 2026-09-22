@@ -1,31 +1,47 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://127.0.0.1:3000
+# Defina localmente; nunca use credenciais/cartões reais neste demonstrador.
+@password = replace-with-local-demo-password
+@adminEmail = admin@example.test
+@adminPassword = replace-with-ADMIN_PASSWORD
+@token = replace-with-token-from-login
 
-### Checkout - sucesso
+### Checkout demonstrativo: cadastro novo ou senha verificada para usuário existente
 POST {{baseUrl}}/api/checkout
 Content-Type: application/json
 
 {
-  "usr": "Guilherme",
-  "eml": "gui@fullcycle.com.br",
-  "pwd": "senhaforte",
+  "usr": "Pessoa Demonstração",
+  "eml": "demo@example.test",
+  "pwd": "{{password}}",
   "c_id": 2,
   "card": "4111222233334444"
 }
 
-### Checkout - pagamento recusado
+### Checkout recusado: não cria usuário/matrícula/pagamento
 POST {{baseUrl}}/api/checkout
 Content-Type: application/json
 
 {
-  "usr": "João",
-  "eml": "joao@teste.com",
-  "pwd": "123",
+  "usr": "Outra Pessoa",
+  "eml": "recusado@example.test",
+  "pwd": "{{password}}",
   "c_id": 1,
   "card": "5111222233334444"
 }
 
-### Relatório financeiro administrativo
-GET {{baseUrl}}/api/admin/financial-report
+### Autenticar administrador configurado no boot
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
 
-### Deletar usuário
-DELETE {{baseUrl}}/api/users/1
+{
+  "eml": "{{adminEmail}}",
+  "pwd": "{{adminPassword}}"
+}
+
+### Relatório financeiro administrativo paginado
+GET {{baseUrl}}/api/admin/financial-report?page=1&per_page=20&student_page=1&students_per_page=50
+Authorization: Bearer {{token}}
+
+### Excluir usuário sem matrículas (contas com histórico retornam 409)
+DELETE {{baseUrl}}/api/users/3
+Authorization: Bearer {{token}}
