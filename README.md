@@ -10,9 +10,9 @@ A skill foi aplicada a três projetos com níveis diferentes de organização: u
 |---|---|---|---:|---|
 | `code-smells-project` | Python / Flask / SQLite | Monolítica, com `app.py`, `controllers.py` e `models.py` concentrando responsabilidades | 15 — 2 CRITICAL, 6 HIGH, 6 MEDIUM, 1 LOW | MVC em `loja/`; F001–F015 resolvidos; 19 testes e 34 requisições HTTP |
 | `ecommerce-api-legacy` | JavaScript / Node.js / Express / SQLite | Monolítica, concentrada em `AppManager.js` | 13 — 5 HIGH, 7 MEDIUM, 1 LOW | MVC incremental; F001–F013 resolvidos; 17 testes e 28 requisições HTTP |
-| `task-manager-api` | Python / Flask / Flask-SQLAlchemy / SQLite | Parcialmente organizada em models, routes, services e utils | 12 — 4 HIGH, 7 MEDIUM, 1 LOW | Arquitetura preservada e ampliada; 8 findings resolvidos e 4 parcialmente resolvidos; 2 testes e endpoints HTTP reais |
+| `task-manager-api` | Python / Flask / Flask-SQLAlchemy / SQLite | Parcialmente organizada em models, routes, services e utils | 12 — 4 HIGH, 7 MEDIUM, 1 LOW | Arquitetura preservada e ampliada; 9 findings resolvidos e 3 parcialmente resolvidos; 15 testes e 13 cenários HTTP reais |
 
-As auditorias da PHASE 2 foram preservadas em [`reports/`](reports/). Os detalhes de implementação e validação da PHASE 3 estão nos documentos `docs/refactoring.md` disponíveis nos projetos.
+As auditorias da PHASE 2 foram preservadas em [`reports/`](reports/). Os detalhes de implementação e validação da PHASE 3 estão nos documentos `docs/refactoring.md` disponíveis nos projetos. A reexecução do `task-manager-api` está registrada em [`reports/audit-project-3.md`](reports/audit-project-3.md#phase-3--reexecução-direcionada-de-f004).
 
 ## 2. Estrutura do Repositório
 
@@ -209,15 +209,19 @@ Portanto, MVC foi usado como distribuição de responsabilidades, não como uma 
 
 ### 5.3 `task-manager-api`
 
-- **Findings:** 12 — 4 HIGH, 7 MEDIUM, 1 LOW.
-- **Antes:** models, routes, services e utils já existiam, mas routes ainda combinavam HTTP, ORM, validação, commits e serialização.
-- **Depois:** configuração, autenticação, error handlers, validação e tempo foram centralizados; services de tarefas/usuários foram extraídos; models receberam hashing, DTOs sem senha e relacionamentos; queries foram otimizadas e o seed tornou-se opt-in para reset.
-- **Principais correções:** tokens assinados, autorização por papel, hashing seguro, remoção de hashes, configuração de SMTP por ambiente, `Session.get()`, UTC consistente, eager loading/agregações, validação central, error handling e seed não destrutivo.
-- **Testes:** 2 testes automatizados passaram.
-- **HTTP:** endpoints reais de health, raiz, login, usuários, tarefas, busca, estatísticas, categorias e relatórios foram exercitados com status 200, 201 e erros esperados.
-- **Resolvidos:** F001, F002, F003, F005, F006, F008, F009 e F010.
-- **Parcialmente resolvidos:** F004, F007, F011 e F012.
-- **Observações:** ainda há lógica de relatório nas rotas, algumas respostas de erro explícitas, necessidade de reforçar foreign-key enforcement no SQLite e serviço de notificações não integrado. Isso não foi ocultado no resultado.
+- **Findings:** 12 — 4 HIGH, 7 MEDIUM, 1 LOW; resultado atualizado: **9 resolvidos e 3 parcialmente resolvidos**.
+- **Antes da reexecução:** algumas routes já delegavam a services, mas relatórios, categorias e outros handlers ainda misturavam HTTP, ORM, regras e persistência.
+- **Depois:** os 20 handlers foram revisados; `report_routes.py`, `task_routes.py` e `user_routes.py` ficam finas e delegam para services, preservando modelos, tabelas, blueprints, caminhos, métodos e decorators de autorização.
+- **Services criados:** `report_service.py` e `category_service.py`.
+- **Services ampliados:** `task_service.py` e `user_service.py`.
+- **Suporte:** `services/transactions.py`, `services/exceptions.py` e `errors.py` concentram transações e tradução de erros.
+- **Testes:** **15 testes passaram**, incluindo os dois existentes; novo `test_route_contracts.py` e fixture compartilhada em `conftest.py`.
+- **HTTP:** **13 cenários HTTP reais passaram**, com banco temporário, cobrindo summary report, relatório por usuário, CRUD de categorias, tarefas, usuários, autenticação, erros e rollback.
+- **Busca residual:** zero ocorrências em `routes/` de `.query`, `db.session`, `session.get`, `session.add`, `session.delete`, `session.commit` e `session.rollback`; nenhum import de models/SQLAlchemy. `git diff --check` passou.
+- **Resolvidos:** F001, F002, F003, **F004**, F005, F006, F008, F009 e F010.
+- **Parcialmente resolvidos:** **F007, F011 e F012**. F004 foi revalidado nesta execução; os demais status resolvidos foram mantidos no consolidado.
+- **Resíduos confirmados:** F007 ainda retorna 500 para `due_date` numérico; F011 apresentou `foreign_keys=0` e duas referências órfãs após exclusões em banco isolado; F012 mantém regras repetidas, helpers/imports sem uso e notificações não integradas fora das routes.
+- **Ajuste de contrato:** cadastro sem senha retorna 400 com “Senha é obrigatória”, substituindo o tratamento inadequado como conflito.
 
 ## 6. Comparação Antes e Depois
 
@@ -255,13 +259,15 @@ Portanto, MVC foi usado como distribuição de responsabilidades, não como uma 
 |---|---|---|
 | Autenticação | Rotas públicas e token falso | Token assinado/expirável e autorização por papel |
 | Senha | MD5 e hash nas respostas | Hashing seguro e resposta sem senha |
-| Arquitetura | Camadas parciais com routes sobrecarregadas | Config, auth, errors, validation e services extraídos; models preservados |
-| Transações | Commits distribuídos e seed destrutivo | Commits por caso de uso e reset do seed opt-in |
+| Arquitetura | Camadas parciais com routes sobrecarregadas | 20 handlers revisados; routes finas → services → models/ORM; F004 RESOLVED |
+| Transações | Commits distribuídos e seed destrutivo | Commit/rollback nos services via `transactions.py`; reset do seed opt-in preservado |
 | Consultas | N+1 | `joinedload`, `selectinload` e agregação de categorias |
 | Configuração | SMTP e secret hardcoded | Variáveis de ambiente e fallback não sensível |
-| Erros | `except:` e mensagens inconsistentes | Error handlers globais, com alguns retornos locais preservados |
+| Erros | `except:` e mensagens inconsistentes | Tradução central de erros esperados; F007 PARTIAL por entradas inválidas ainda retornarem 500 |
 | Deprecated APIs | `Query.get()` e `datetime.utcnow()` | `Session.get()` e helper UTC |
-| Validação | Regras repetidas em rotas/helpers | Validators compartilhados |
+| Validação | Regras repetidas em rotas/helpers | Validators compartilhados; 15 testes e 13 cenários HTTP reais passaram; F012 ainda PARTIAL |
+| ORM nas routes | Queries, mutações e agregações nos handlers | Zero ocorrências nos sete padrões buscados; nenhum import de models/SQLAlchemy |
+| Integridade relacional | Exclusões dependentes de lógica manual | F011 PARTIAL: `SET NULL` declarado, mas enforcement SQLite não ativo na validação |
 
 ## 7. Checklist de Validação
 
@@ -347,11 +353,17 @@ Portanto, MVC foi usado como distribuição de responsabilidades, não como uma 
 - [x] Refatoração incremental executada.
 - [x] Configuração, auth, validation e error handling extraídos.
 - [x] Models e routes existentes preservados.
-- [x] Services extraídos para tarefas e usuários.
-- [ ] Separação completa de controllers/repositories: parcial, pois ainda há acesso ORM e lógica de relatório em rotas.
+- [x] Services de tarefas/usuários ampliados; services de relatórios/categorias criados.
+- [x] F004 RESOLVED: todos os 20 handlers revisados e routes finas, sem persistência ou regra comercial direta.
+- [x] Busca final pelos sete padrões ORM/persistência sem ocorrências em `routes/`.
+- [x] Nenhum import de models/SQLAlchemy nas routes.
+- [x] Caminhos, métodos, blueprints e decorators de autorização preservados.
+- [x] 15 testes passaram; fixture compartilhada em `conftest.py`.
+- [x] 13 cenários HTTP reais passaram, incluindo relatórios, categorias, tarefas e usuários.
+- [x] `git diff --check` passou.
 - [x] Entry point e boot validados.
 - [x] Endpoints originais exercitados por HTTP real.
-- [ ] Todos os findings completamente resolvidos: quatro permanecem parciais e estão documentados.
+- [ ] Todos os findings completamente resolvidos: 9 resolvidos; F007, F011 e F012 permanecem parciais e estão documentados.
 
 ## 8. Como Executar
 
@@ -420,7 +432,7 @@ Os comandos de validação reais são específicos de cada projeto e estão docu
 - **A refatoração incremental foi essencial no `task-manager-api`.** Models, blueprints e o objeto de extensão SQLAlchemy eram úteis e foram preservados; services e validações foram extraídos onde havia acoplamento real.
 - **Segurança pode exigir mudança legítima de contrato.** Remover SQL administrativo, exigir Bearer, ignorar papel enviado no cadastro e retirar hashes das respostas altera contratos vulneráveis, mas evita preservar comportamento inseguro.
 - **Validação real foi essencial.** Testes unitários isolados não bastaram: os projetos também foram iniciados e exercitados por HTTP, com verificação de status, autorização, efeitos persistidos e rollback quando aplicável.
-- **Limitações precisam permanecer visíveis.** O `task-manager-api` ainda tem quatro findings parciais; declarar todos os problemas resolvidos teria contrariado os documentos de resultado.
+- **Limitações precisam permanecer visíveis.** O `task-manager-api` tem 9 findings resolvidos e três parciais (F007, F011 e F012); declarar todos os problemas resolvidos teria contrariado os documentos de resultado.
 
 ## 10. Conclusão
 

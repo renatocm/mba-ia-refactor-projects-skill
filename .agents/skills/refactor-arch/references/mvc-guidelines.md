@@ -13,7 +13,21 @@ MVC define responsabilidades, não uma árvore universal. Preserve convenções 
 | Middleware / Error handling | Autenticação transversal, contexto, tradução central de erros e logs. | Autorização por recurso permanece próxima do caso de uso; erros internos não vazam para cliente. |
 | Composition root / Entry point | Construir aplicação, conectar dependências, registrar rotas e lifecycle. | Não contém regras comerciais nem executa seeds destrutivos ao importar/iniciar. |
 
-Direção preferida: entrada → controller → serviço/model; persistência e integrações cumprem contratos necessários ao caso de uso. Em fluxos simples, um controller pode usar diretamente um model ORM de acordo com a stack; introduza camadas extras somente para isolar responsabilidades concretas.
+Direção preferida: entrada → controller → service/use case → models/repositories; persistência e integrações cumprem contratos necessários ao caso de uso. O service pode usar models ORM sem repository intermediário quando a complexidade não justificar essa camada.
+
+## Thin route / thin controller
+
+Uma route/controller HTTP deve se limitar, preferencialmente, a:
+
+- Receber e parsear parâmetros HTTP, delegando validação sintática a schemas quando adequado.
+- Obter identidade/contexto da requisição.
+- Delegar para service/use case.
+- Converter resultado para resposta HTTP/presenter.
+- Mapear erros por meio do mecanismo centralizado.
+
+Uma route/controller NÃO deve conter diretamente queries ORM; `db.session.get/query/filter/filter_by`; `db.session.add/delete/commit/rollback`; SQL; agregações de relatório; regras comerciais; loops de persistência; ou transações. Isso inclui APIs equivalentes da stack detectada. Essas responsabilidades pertencem aos services e, quando útil, a repositories/data access; o service define a unidade transacional e o domínio mantém suas invariantes. Obter a identidade HTTP não equivale a decidir regras de autorização comercial, que pertencem ao caso de uso.
+
+Esse limite vale para TODAS as rotas do módulo auditado, inclusive leitura, exclusão e relatórios, não somente para endpoints alterados inicialmente.
 
 Defina transação por unidade de trabalho e lifecycle conforme runtime: conexão/sessão por contexto, pool gerenciado quando suportado, teardown garantido. Não confunda objeto de extensão/factory global com sessão/conexão mutável compartilhada. Operação remota não participa automaticamente da transação local.
 

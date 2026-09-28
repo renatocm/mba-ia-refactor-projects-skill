@@ -28,13 +28,17 @@ Use somente os padrões associados aos findings autorizados. Exemplos curtos sã
 - **After:** `repository = Repository(pool); service = CheckoutService(repository, gateway); controller = CheckoutController(service); register_routes(router, controller)`.
 - **Validação:** regra de checkout testável com gateway falso isolado; integração real preservada; rotas mantêm contratos. Nenhum novo componente acumula todas as responsabilidades.
 
-## P04 — Route/controller pesado → controller/service (AP06)
+## P04 — Heavy Route/Controller → Thin Route + Service (AP06)
 - **Problema:** handler calcula total, verifica estoque, persiste e monta resposta.
 - **Objetivo:** deixar transporte e caso de uso independentes.
 - **Estratégia:** schema valida entrada; serviço aplica regras e retorna resultado/erro de domínio; controller traduz HTTP.
 - **Before:** JS `router.post('/orders', async (req, res) => { /* validar, SQL, estoque, total, pagamento */ })`.
 - **After:** JS `router.post('/orders', adaptAsync(controller.create))`; controller chama `await service.create(validate(req.body), req.user)` e entrega DTO/status. `adaptAsync` encaminha rejeições ao mecanismo de erro da versão do framework.
 - **Validação:** testes do serviço cobrem invariantes sem request/response; testes de rota verificam payload, status, identidade e erros.
+- **Critério de conclusão — ANTES:** route faz HTTP + ORM + regra + commit.
+- **Critério de conclusão — DEPOIS:** route apenas parseia/valida entrada HTTP, obtém identidade/contexto, chama service e retorna presenter/response; erros seguem o mecanismo centralizado. Service coordena regra de negócio, chama repositories/models e define a unidade transacional. Repository/data access concentra queries quando a complexidade justificar.
+- **Validação pós-refatoração obrigatória:** busque em todos os diretórios de routes/controllers por `.query`, `db.session`, `session.get`, `session.add`, `session.delete`, `session.commit`, `session.rollback` e chamadas ORM equivalentes da stack detectada, incluindo aliases. Inspecione também handlers definidos fora desses diretórios. Faça a busca final em toda a codebase do projeto para identificar ocorrências residuais ou responsabilidades apenas deslocadas.
+- **Revisão dos resultados:** a presença desses padrões não é automaticamente erro; examine cada correspondência e registre a conclusão. Se representar persistência ou regra de negócio direta no handler, o finding não pode ser RESOLVED. Verifique TODAS as rotas do módulo auditado, não só endpoints inicialmente alterados; registre cobertura e resíduos como PARTIAL ou OPEN conforme a PHASE 3.
 
 ## P05 — Global DB connection → lifecycle apropriado (AP07)
 - **Problema:** requisições compartilham conexão/sessão mutável sem isolamento.

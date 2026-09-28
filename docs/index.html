@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Refactor Arch — documentação visual do desafio de criação de uma skill para auditoria e refatoração arquitetural.">
+  <title>Refactor Arch — Architecture Audit</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label="Refactor Arch, início">
+        <span class="brand-mark" aria-hidden="true">RA</span>
+        <span>Refactor Arch</span>
+      </a>
+      <nav aria-label="Navegação principal">
+        <a href="#flow">Fluxo</a>
+        <a href="#projects">Projetos</a>
+        <a href="#patterns">Anti-patterns</a>
+        <a href="#results">Resultados</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">MBA em Inteligência Artificial · Engenharia de Software</p>
+        <h1 id="hero-title">Refactor Arch</h1>
+        <p class="hero-title">Custom Skill para Refatoração Arquitetural Automatizada</p>
+        <p class="hero-lead">Skill construída com OpenAI Codex para analisar, auditar e refatorar projetos legados para uma arquitetura MVC adaptada à tecnologia encontrada.</p>
+        <div class="badge-list" aria-label="Tecnologias e conceitos">
+          <span class="badge accent">OpenAI Codex</span><span class="badge">Agent Skill</span><span class="badge">Python</span><span class="badge">Flask</span><span class="badge">Node.js</span><span class="badge">Express</span><span class="badge">MVC</span><span class="badge">Architecture Audit</span>
+        </div>
+      </div>
+      <div class="hero-panel glass" aria-label="Indicadores do desafio">
+        <div class="panel-kicker">Visão do desafio</div>
+        <div class="metric-grid">
+          <div class="metric"><strong>3</strong><span>projetos analisados</span></div>
+          <div class="metric"><strong>40</strong><span>findings encontrados</span></div>
+          <div class="metric"><strong>3</strong><span>stacks / cenários</span></div>
+          <div class="metric"><strong>1</strong><span>skill reutilizável</span></div>
+        </div>
+        <div class="hero-line"><span></span><small>análise baseada em evidências</small></div>
+      </div>
+    </section>
+
+    <section class="section container" id="about" aria-labelledby="about-title">
+      <div class="section-heading"><p class="eyebrow">01 · Contexto</p><h2 id="about-title">Sobre o desafio</h2></div>
+      <div class="about-grid">
+        <p class="large-copy">O desafio acadêmico transforma uma revisão manual de legado em um fluxo repetível: detectar a stack, entender a arquitetura efetiva, encontrar anti-patterns, produzir uma auditoria rastreável, solicitar aprovação humana, refatorar e validar o comportamento.</p>
+        <div class="callout"><span class="callout-dot"></span><p>A mesma skill foi aplicada aos três projetos, sem presumir Python, Flask ou uma estrutura de diretórios específica.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="flow" aria-labelledby="flow-title">
+      <div class="section-heading"><p class="eyebrow">02 · Método</p><h2 id="flow-title">Fluxo da skill</h2><p>Leitura e auditoria são separadas da escrita. A confirmação humana é um limite explícito entre diagnóstico e transformação.</p></div>
+      <div class="flow" role="list">
+        <article class="flow-card" role="listitem"><span class="flow-number">01</span><h3>PHASE 1</h3><h4>PROJECT ANALYSIS</h4><ul><li>Linguagem e framework</li><li>Dependências e banco</li><li>Domínio e arquitetura</li><li>Entry point e arquivos</li></ul></article>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <article class="flow-card" role="listitem"><span class="flow-number">02</span><h3>PHASE 2</h3><h4>ARCHITECTURE AUDIT</h4><ul><li>Anti-patterns</li><li>Severidade</li><li>Arquivos e linhas</li><li>Relatório estruturado</li></ul></article>
+        <span class="flow-arrow approval" aria-label="aguarda aprovação humana">→</span>
+        <article class="flow-card approval-card" role="listitem"><span class="flow-number">H</span><h3>HUMAN APPROVAL</h3><h4>PAUSA OBRIGATÓRIA</h4><p>Nenhuma alteração é feita antes da confirmação explícita do relatório e do escopo.</p></article>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <article class="flow-card" role="listitem"><span class="flow-number">03</span><h3>PHASE 3</h3><h4>REFACTORING</h4><ul><li>MVC adaptado</li><li>Segurança e qualidade</li><li>Testes e boot</li><li>Endpoints validados</li></ul></article>
+      </div>
+    </section>
+
+    <section class="section container" id="skill" aria-labelledby="skill-title">
+      <div class="section-heading"><p class="eyebrow">03 · Design</p><h2 id="skill-title">Arquitetura da skill</h2><p>Um orquestrador curto coordena referências especializadas carregadas conforme a fase.</p></div>
+      <div class="skill-grid">
+        <pre class="tree"><code>.agents/skills/refactor-arch/
+├── SKILL.md
+└── references/
+    ├── project-analysis.md
+    ├── anti-patterns.md
+    ├── audit-report-template.md
+    ├── mvc-guidelines.md
+    └── refactoring-playbook.md</code></pre>
+        <div class="reference-list">
+          <div><code>SKILL.md</code><p>Orquestra as três fases.</p></div>
+          <div><code>project-analysis.md</code><p>Heurísticas de detecção de stack e arquitetura.</p></div>
+          <div><code>anti-patterns.md</code><p>16 padrões de problemas arquiteturais, segurança e qualidade.</p></div>
+          <div><code>audit-report-template.md</code><p>Padronização dos relatórios.</p></div>
+          <div><code>mvc-guidelines.md</code><p>Arquitetura alvo adaptável à tecnologia.</p></div>
+          <div><code>refactoring-playbook.md</code><p>13 padrões concretos de transformação.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="projects" aria-labelledby="projects-title">
+      <div class="section-heading"><p class="eyebrow">04 · Estudos de caso</p><h2 id="projects-title">Projetos analisados</h2><p>Três codebases, três pontos de partida e uma estratégia adaptada a cada contexto.</p></div>
+      <div class="project-grid">
+        <article class="project-card"><div class="project-top"><span class="project-index">01</span><span class="stack-label">Python · Flask · SQLite</span></div><h3>code-smells-project</h3><p class="project-before"><b>Antes</b> Monólito com responsabilidades misturadas.</p><div class="severity-row"><span class="severity critical"><b>2</b> CRITICAL</span><span class="severity high"><b>6</b> HIGH</span><span class="severity medium"><b>6</b> MEDIUM</span><span class="severity low"><b>1</b> LOW</span></div><div class="project-result"><strong>15 findings</strong><span>F001–F015 resolvidos</span></div><div class="validation"><span>19 testes</span><span>34 requisições HTTP</span></div><h4>Principais melhorias</h4><div class="mini-tags"><span>SQL parametrizado</span><span>Autenticação</span><span>Hashing</span><span>Transactions</span><span>MVC</span><span>N+1</span><span>Error handling</span></div></article>
+        <article class="project-card featured"><div class="project-top"><span class="project-index">02</span><span class="stack-label">JavaScript · Node.js · Express</span></div><h3>ecommerce-api-legacy</h3><p class="project-before"><b>Antes</b> God Class <code>AppManager</code>.</p><div class="severity-row"><span class="severity high"><b>5</b> HIGH</span><span class="severity medium"><b>7</b> MEDIUM</span><span class="severity low"><b>1</b> LOW</span></div><div class="project-result"><strong>13 findings</strong><span>F001–F013 resolvidos</span></div><div class="validation"><span>17 testes</span><span>28 requisições HTTP</span></div><h4>Principais melhorias</h4><div class="mini-tags"><span>MVC</span><span>Autenticação</span><span>scrypt</span><span>Transações</span><span>Checkout</span><span>N+1</span><span>Logs seguros</span><span>Dependências deprecated</span></div><p class="tradeoff"><b>Trade-off:</b> migração de <code>sqlite3</code> para <code>node:sqlite</code> e requisito de Node 24.15+.</p></article>
+        <article class="project-card"><div class="project-top"><span class="project-index">03</span><span class="stack-label">Python · Flask · SQLAlchemy</span></div><h3>task-manager-api</h3><p class="project-before"><b>Antes</b> Arquitetura parcialmente organizada.</p><div class="severity-row"><span class="severity high"><b>4</b> HIGH</span><span class="severity medium"><b>7</b> MEDIUM</span><span class="severity low"><b>1</b> LOW</span></div><div class="project-result"><strong>12 findings</strong><span>9 resolvidos · 3 parciais</span></div><div class="validation"><span>15 testes passaram</span><span>13 cenários HTTP reais</span></div><h4>Principais melhorias</h4><div class="mini-tags"><span>Auth</span><span>Hashing</span><span>Services</span><span>Validation</span><span>UTC</span><span>N+1</span><span>Error handling</span></div><p class="incremental"><b>F004 RESOLVED:</b> 20 handlers revisados; routes finas delegam para services. Zero ocorrências residuais dos padrões ORM/persistência e nenhum import de models/SQLAlchemy nas routes.<br><b>Parciais:</b> F007, F011 e F012. Caminhos, métodos e autorização preservados.</p></article>
+      </div>
+    </section>
+
+    <section class="section container" id="patterns" aria-labelledby="patterns-title">
+      <div class="section-heading inline-heading"><div><p class="eyebrow">05 · Catálogo</p><h2 id="patterns-title">Anti-patterns</h2></div><span class="catalog-count">16 padrões catalogados</span></div>
+      <div class="pattern-grid"><span>SQL Injection</span><span>Hardcoded Secrets</span><span>Insecure Password Storage</span><span>Missing Authentication</span><span>God Class</span><span>Business Logic in Controllers</span><span>Global Mutable State</span><span>Missing Transactions</span><span>N+1 Queries</span><span>Missing Validation</span><span>Duplicated Code</span><span>Magic Numbers</span><span>Deprecated APIs</span><span>Error Handling</span><span>Dead Code</span><span>Fake / Simulated Integrations</span></div>
+    </section>
+
+    <section class="section container" id="transformations" aria-labelledby="transformations-title">
+      <div class="section-heading"><p class="eyebrow">06 · Playbook</p><h2 id="transformations-title">Exemplos de transformação</h2><p>O playbook traduz cada problema em uma mudança verificável de responsabilidade ou segurança.</p></div>
+      <div class="transform-grid"><div><span>SQL concatenado</span><b>→</b><strong>SQL parametrizado</strong></div><div><span>Password inseguro</span><b>→</b><strong>Hashing apropriado</strong></div><div><span>God Class</span><b>→</b><strong>Controller + Service + Repository</strong></div><div><span>Business Logic em Route</span><b>→</b><strong>Service</strong></div><div><span>Conexão global</span><b>→</b><strong>Lifecycle / Unit of Work</strong></div><div><span>N+1</span><b>→</b><strong>JOIN / eager loading / batch</strong></div><div><span>Hardcoded config</span><b>→</b><strong>Environment / config</strong></div><div><span>Deprecated API</span><b>→</b><strong>API moderna</strong></div><div><span>Error handling espalhado</span><b>→</b><strong>Handler centralizado</strong></div></div>
+    </section>
+
+    <section class="section container" id="results" aria-labelledby="results-title">
+      <div class="section-heading"><p class="eyebrow">07 · Evidências</p><h2 id="results-title">Comparação dos resultados</h2></div>
+      <div class="table-wrap"><table><caption class="sr-only">Comparação das auditorias e validações</caption><thead><tr><th>Projeto</th><th>Findings</th><th>Críticos</th><th>High</th><th>Medium</th><th>Low</th><th>Testes</th><th>HTTP</th></tr></thead><tbody><tr><th scope="row">code-smells-project</th><td>15</td><td>2</td><td>6</td><td>6</td><td>1</td><td>19</td><td>34</td></tr><tr><th scope="row">ecommerce-api-legacy</th><td>13</td><td>0</td><td>5</td><td>7</td><td>1</td><td>17</td><td>28</td></tr><tr><th scope="row">task-manager-api</th><td>12</td><td>0</td><td>4</td><td>7</td><td>1</td><td>15</td><td>13 cenários reais</td></tr></tbody></table></div><div class="total-line"><span>Total</span><strong>40 findings analisados</strong></div>
+    </section>
+
+    <section class="section container" id="lessons" aria-labelledby="lessons-title">
+      <div class="section-heading"><p class="eyebrow">08 · Síntese</p><h2 id="lessons-title">Principais aprendizados</h2></div>
+      <div class="lesson-grid"><article><h3>Skill agnóstica</h3><p>Identifica responsabilidades e padrões, não nomes de arquivos.</p></article><article><h3>Contexto importa</h3><p>Severidade depende do uso real da aplicação.</p></article><article><h3>Deprecated precisa de evidência</h3><p>Código antigo não significa automaticamente API deprecated.</p></article><article><h3>Refatoração incremental</h3><p>Projetos organizados não precisam ser reconstruídos do zero.</p></article><article><h3>Human in the Loop</h3><p>A PHASE 2 sempre pausa antes de qualquer alteração.</p></article><article><h3>Validação real</h3><p>Boot, testes e endpoints verificam as refatorações.</p></article></div>
+    </section>
+
+    <section class="final-banner container" aria-labelledby="final-title"><div><p class="eyebrow">Resultado final</p><h2 id="final-title">Uma única skill.<br>Três projetos.<br>Duas linguagens.</h2><p>A mesma skill adaptou a estratégia de refatoração conforme o estado e a tecnologia de cada aplicação.</p></div><div class="language-stack"><span>Python / Flask</span><span>JavaScript / Node.js</span><span>Flask / SQLAlchemy</span></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-wrap"><div><strong>Refactor Arch</strong><span>MBA em Inteligência Artificial</span></div><span>Desafio — Criação de Skills · OpenAI Codex</span></div></footer>
+</body>
+</html>

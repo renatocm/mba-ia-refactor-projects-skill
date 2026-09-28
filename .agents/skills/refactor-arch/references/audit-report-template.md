@@ -56,4 +56,10 @@ Você confirma a execução da PHASE 3 — REFACTORING para este escopo?
 Esta skill exige confirmação após a auditoria; nenhum arquivo foi alterado nesta execução.
 ```
 
-Após refatoração autorizada, acrescente uma seção de resultado sem reescrever evidências da revisão original: estrutura antes/depois, alterações contratuais, comandos/resultados de boot e testes de endpoints, limitações e tabela `Finding ID | Status | Evidência da correção | Validação`. Não marque como resolvido um finding apenas por ter movido seu código de arquivo.
+Após refatoração autorizada, acrescente uma seção de resultado sem reescrever evidências da revisão original: estrutura antes/depois, alterações contratuais, comandos/resultados de boot e testes de endpoints, limitações e a tabela abaixo. Não marque como resolvido um finding apenas por ter movido seu código de arquivo ou corrigido alguns exemplos.
+
+| Finding ID | Status | Evidência da correção | Validação de ausência residual |
+|---|---|---|---|
+| <ID original> | <RESOLVED / PARTIAL / OPEN / N/A> | <mudança e locais na revisão final; testes/resultados> | <escopo reinspecionado após a mudança; buscas/comandos; resultados e revisão das correspondências; resíduos e limitações> |
+
+Para findings arquiteturais, exija evidência de que a codebase foi verificada novamente após a mudança. Para HIGH/CRITICAL de separação arquitetural, registre cobertura completa dos componentes/handlers abrangidos, sem amostragem. Nos padrões sujeitos à busca final obrigatória da PHASE 3, documente a busca em toda a codebase do projeto. Correspondências descartadas precisam de justificativa; ausência textual isolada não prova resolução. Qualquer ocorrência relevante restante no escopo auditado, cobertura incompleta ou validação inconclusiva impede RESOLVED: use PARTIAL ou OPEN conforme a correção efetiva e liste as pendências.

@@ -1,7 +1,13 @@
 from flask import jsonify
 from sqlalchemy.exc import IntegrityError
+from services.exceptions import ApplicationError, InvalidInput, NotFound, Conflict, AccessDenied, InvalidCredentials
 
 def register_error_handlers(app):
+    @app.errorhandler(ApplicationError)
+    def application_error(error):
+        status = {InvalidInput: 400, NotFound: 404, Conflict: 409,
+                  AccessDenied: 403, InvalidCredentials: 401}[type(error)]
+        return jsonify(error=str(error)), status
     @app.errorhandler(400)
     def bad_request(error): return jsonify(error="Dados inválidos"), 400
     @app.errorhandler(404)
